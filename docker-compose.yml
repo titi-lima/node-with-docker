@@ -1,0 +1,42 @@
+# docker run -d -v /home/tiago/Documents/node-with-docker:/usr/src/app -v /usr/src/app/node_modules -p 3001:3001 node-with-docker
+version: '3'
+services:
+  server:
+    build: .
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - test_db
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DATABASE_DB}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  test_db:
+    image: postgres
+    ports:
+      - 5433:5432
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DATABASE_TEST_DB}
+      - POSTGRES_USER=${DATABASE_TEST_USER}
+      - POSTGRES_PASSWORD=${DATABASE_TEST_PASSWORD}
+
+volumes:
+  node_modules:
+  pgdata:
