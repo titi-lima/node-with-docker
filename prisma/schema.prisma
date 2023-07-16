@@ -17,7 +17,8 @@ model User {
   password    String
   games       String[]
   profile_pic String?
-  Room        Room[]
+
+  rooms PlayersOnRoom[]
 
   @@map("users")
 }
@@ -31,8 +32,16 @@ model Room {
   link        String
   max_players Int
 
-  players  User   @relation(fields: [playerId], references: [id])
-  playerId String
+  players PlayersOnRoom[]
 
   @@map("rooms")
+}
+
+model PlayersOnRoom {
+  player    User   @relation(fields: [player_id], references: [id])
+  player_id String
+  room      Room   @relation(fields: [room_id], references: [id])
+  room_id   String
+
+  @@id([player_id, room_id])
 }
