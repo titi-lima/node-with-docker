@@ -40,3 +40,5 @@ class RoomRepository {
     return room;
   }
 }
+
+export default new RoomRepository();
