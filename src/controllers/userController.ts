@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import userRepository from "../repositories/userRepository";
-import { userSchema, userUpdateSchema } from "src/DTOs/User";
+import { userSchema, userUpdateSchema } from "../DTOs/User";
 
 class UserController {
   async readAll(req: Request, res: Response, next: NextFunction) {

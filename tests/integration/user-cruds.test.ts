@@ -24,4 +24,45 @@ describe("User CRUDS", () => {
     await connection.clear();
     await connection.close();
   });
+
+  it("should create a new user", async () => {
+    const response = await request(app).post("/users").send(fakeUser);
+
+    expect(response.status).toBe(201);
+  });
+
+  it("should return all users", async () => {
+    await request(app).post("/users").send(fakeUser);
+
+    const response = await request(app).get("/users");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(1);
+  });
+
+  it("should update a user", async () => {
+    const response = await request(app).post("/users").send(fakeUser);
+
+    const { id } = response.body;
+
+    const updatedUser = {
+      email: "mm@gmail.com",
+    };
+
+    const updatedResponse = await request(app)
+      .patch(`/users/${id}`)
+      .send(updatedUser);
+
+    expect(updatedResponse.status).toBe(200);
+  });
+
+  it("should delete a user", async () => {
+    const response = await request(app).post("/users").send(fakeUser);
+
+    const { id } = response.body;
+
+    const deletedResponse = await request(app).delete(`/users/${id}`);
+
+    expect(deletedResponse.status).toBe(200);
+  });
 });
