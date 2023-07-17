@@ -1,42 +1,53 @@
-# docker run -d -v /home/tiago/Documents/node-with-docker:/usr/src/app -v /usr/src/app/node_modules -p 3001:3001 node-with-docker
-version: '3'
+version: "3"
 services:
   server:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node-with-docker
+    container_name: ${PROJECT_NAME}-server
+    restart: unless-stopped
+    env_file: .env
     ports:
-      - 3001:3001
+      - "${SERVER_PORT}:3001"
     volumes:
       - .:/usr/src/app
       - node_modules:/usr/src/app/node_modules
-    env_file:
-      - .env
+    command: yarn dev
     depends_on:
       - db
-      - test_db
+      - test-db
+
   db:
     image: postgres
-    ports:
-      - 5432:5432
-    env_file:
-      - .env
+    container_name: ${PROJECT_NAME}-db
+    restart: unless-stopped
+    env_file: .env
     environment:
-      - POSTGRES_DB=${DATABASE_DB}
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "${DATABASE_PORT}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  test_db:
+  test-db:
     image: postgres
-    ports:
-      - 5433:5432
-    env_file:
-      - .env
+    container_name: ${PROJECT_NAME}-test-db
+    env_file: .env
     environment:
-      - POSTGRES_DB=${DATABASE_TEST_DB}
       - POSTGRES_USER=${DATABASE_TEST_USER}
       - POSTGRES_PASSWORD=${DATABASE_TEST_PASSWORD}
+      - POSTGRES_DB=${DATABASE_TEST_DB}
+    ports:
+      - "${DATABASE_TEST_PORT}:5432"
 
 volumes:
-  node_modules:
   pgdata:
+  node_modules:
+
+    # Documentação usada para a construção desse arquivo
+    # https://www.digitalocean.com/community/tutorials/containerizing-a-node-js-application-for-development-with-docker-compose-pt
+    # (principalmente o passo 4)

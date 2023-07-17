@@ -18,6 +18,7 @@ class UserController {
       return res.status(201).json(user);
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
 
@@ -34,6 +35,7 @@ class UserController {
       return res.status(200).json(user);
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
 
@@ -50,6 +52,7 @@ class UserController {
       return res.status(200).json(user);
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
 
@@ -64,6 +67,7 @@ class UserController {
       return res.status(200).json(users);
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
 
@@ -81,6 +85,7 @@ class UserController {
       return res.status(200).json(user);
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
 
@@ -97,10 +102,11 @@ class UserController {
       return res.status(200).json(user);
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
 
-  async listRooms(req: Request, res: Response, next: NextFunction) { 
+  async listRooms(req: Request, res: Response, next: NextFunction) {
     try {
       const { room_id } = req.params;
 
@@ -109,6 +115,7 @@ class UserController {
       return res.status(200).json(rooms);
     } catch (error) {
       console.log(error);
+      next(error);
     }
   }
 }

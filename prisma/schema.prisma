@@ -17,8 +17,7 @@ model User {
   password    String
   games       String[]
   profile_pic String?
-
-  rooms Room[]
+  rooms       Room[]
 
   @@map("users")
 }
@@ -26,13 +25,12 @@ model User {
 model Room {
   id          String   @id @default(uuid())
   game_played String
-  date        DateTime
+  time        DateTime
   place       String
   description String
   link        String
   max_players Int
-
-  players User[]
+  players     User[]
 
   @@map("rooms")
 }

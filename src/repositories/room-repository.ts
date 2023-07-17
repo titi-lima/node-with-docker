@@ -1,4 +1,4 @@
-import prisma from "src/database/client";
+import prisma from "../database/client";
 import { Prisma, Room, User } from "@prisma/client";
 
 class RoomRepository {
