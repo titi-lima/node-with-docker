@@ -37,6 +37,36 @@ class UserController {
     }
   }
 
+  async readByEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email } = req.params;
+
+      const user = await UserRepository.findByEmail(email);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      return res.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async readAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const users = await UserRepository.findAll();
+
+      if (!users) {
+        return res.status(404).json({ message: "Users not found" });
+      }
+
+      return res.status(200).json(users);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async update(req: Request, res: Response, next: NextFunction) {
     try {
       const { user_id } = req.params;
@@ -69,4 +99,18 @@ class UserController {
       console.log(error);
     }
   }
+
+  async listRooms(req: Request, res: Response, next: NextFunction) { 
+    try {
+      const { room_id } = req.params;
+
+      const rooms = await UserRepository.listRooms(room_id);
+
+      return res.status(200).json(rooms);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
+
+export default new UserController();

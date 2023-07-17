@@ -14,7 +14,7 @@ CREATE TABLE "users" (
 CREATE TABLE "rooms" (
     "id" TEXT NOT NULL,
     "game_played" TEXT NOT NULL,
-    "time" TIMESTAMP(3) NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
     "place" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "link" TEXT NOT NULL,
@@ -24,18 +24,22 @@ CREATE TABLE "rooms" (
 );
 
 -- CreateTable
-CREATE TABLE "PlayersOnRoom" (
-    "player_id" TEXT NOT NULL,
-    "room_id" TEXT NOT NULL,
-
-    CONSTRAINT "PlayersOnRoom_pkey" PRIMARY KEY ("player_id","room_id")
+CREATE TABLE "_RoomToUser" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
--- AddForeignKey
-ALTER TABLE "PlayersOnRoom" ADD CONSTRAINT "PlayersOnRoom_player_id_fkey" FOREIGN KEY ("player_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "_RoomToUser_AB_unique" ON "_RoomToUser"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_RoomToUser_B_index" ON "_RoomToUser"("B");
 
 -- AddForeignKey
-ALTER TABLE "PlayersOnRoom" ADD CONSTRAINT "PlayersOnRoom_room_id_fkey" FOREIGN KEY ("room_id") REFERENCES "rooms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "_RoomToUser" ADD CONSTRAINT "_RoomToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "rooms"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_RoomToUser" ADD CONSTRAINT "_RoomToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -18,7 +18,7 @@ model User {
   games       String[]
   profile_pic String?
 
-  rooms PlayersOnRoom[]
+  rooms Room[]
 
   @@map("users")
 }
@@ -26,22 +26,13 @@ model User {
 model Room {
   id          String   @id @default(uuid())
   game_played String
-  time        DateTime
+  date        DateTime
   place       String
   description String
   link        String
   max_players Int
 
-  players PlayersOnRoom[]
+  players User[]
 
   @@map("rooms")
-}
-
-model PlayersOnRoom {
-  player    User   @relation(fields: [player_id], references: [id])
-  player_id String
-  room      Room   @relation(fields: [room_id], references: [id])
-  room_id   String
-
-  @@id([player_id, room_id])
 }
