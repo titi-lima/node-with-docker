@@ -7,14 +7,14 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  let message = error.message || "Internal server error";
-  let status = error.status || 500;
+  let message;
+  let status;
   if (error instanceof ZodError) {
     status = 400;
     message = error.issues[0].message;
   }
 
-  return res.status(status).json({ message });
+  return res.status(status || 500).json({ message });
 };
 
 export default errorHandler;
