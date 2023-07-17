@@ -8,6 +8,8 @@ RUN yarn install
 
 COPY . .
 
+RUN yarn prisma generate
+
 EXPOSE 3001
 
 CMD ["yarn", "dev"]
