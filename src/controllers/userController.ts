@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import userRepository from "../repositories/userRepository";
 import { userSchema, userUpdateSchema } from "../DTOs/User";
+import { hash } from "bcryptjs";
 
 class UserController {
   async readAll(req: Request, res: Response, next: NextFunction) {
@@ -29,7 +30,12 @@ class UserController {
     try {
       const userData = userSchema.parse(req.body);
 
-      const user = await userRepository.create(userData);
+      const userHashed = {
+        ...userData,
+        password: await hash(userData.password, 6),
+      }
+
+      const user = await userRepository.create(userHashed);
 
       return res.status(201).json(user);
     } catch (err) {
